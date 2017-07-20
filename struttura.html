@@ -1,0 +1,303 @@
+<!doctype html> 
+<!--[if lt IE 10]> <html class="lt-ie9"> <![endif]-->
+<html lang="it"> 
+<head> 
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="-1">
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 11:00:00 GMT">
+<meta http-equiv="pragma" content="no-cache">
+<title>Quadro Soggetti</title>
+
+ <!-- jQuery and Bootstrap's JavaScript plugins -->
+    <script src="layout/js/jquery.min.js"></script>
+    <script src="layout/js/bootstrap.min.js"></script>	
+	<script src="layout/js/bootstrap-datepicker.min.js"></script>
+	<script src="layout/js/bootstrap-datepicker.it.min.js"></script>	
+	<script src="layout/js/jqBootstrapValidation.js"></script>
+	<script src="layout/dati/elenchi.js"></script>
+	<script src="layout/localFunction.js"></script>
+	<script src="layout/getJSON.js"></script>
+	<script src="layout/validaSoggetti.js"></script>
+	<script src="layout/saveJSON.js"></script>
+
+    <!-- CSS -->
+    <link href="layout/css/bootstrap.min.css" rel="stylesheet">
+	<link href="layout/css/bootstrap-datepicker.standalone.min.css" rel="stylesheet">
+	
+	<link href="layout/localStyle.css" rel="stylesheet">
+	
+</head>
+  <body onload="init(['elencoSoggetti'])"> 
+	<div id="portalHeader_title"><h1></h1></div>
+	<div class="container">
+		<section id="content">
+			<div class="button2">
+				<a href="#" onclick="createElementsFromJSON();">Inizializza</a>
+				<a href="#" onclick="validaSoggettiCoinvolti('elencoSoggetti')">Valida</a>
+				<a href="#" onclick="saveJSON()">Salva</a>
+			</div>		
+			<form action="" id="formSoggetti">
+				<h1>Soggetti coinvolti</h1>
+				<div id="elencoSoggetti">
+					<div id="soggetto_a1" class="soggetto elenco">
+						<input type="hidden" id="idSoggetto_a1" value="">
+						<input type="hidden" id="isProfessionista_a1" value="">
+						<input type="hidden" id="isProfessionistaChanged_a1" value="">
+						<div><span class="spanclose"><span class="buttonClose"><a href="#" onclick="chiudiSoggetto('soggetto_a1')"></a></span></span>
+							<h2>Ruoli</h2>
+							<div class="commento">Inserire almeno un soggetto intestatario, un progettista e, in caso di lavori non eseguiti in proprio, un'impresa esecutrice dei lavori</div>
+							<div id="elencoRuoli_a1">
+								<div id="divRuolo_a1_b1" class="elenco">
+									<label>Ruolo nell'ambito dell'istanza:</label> 
+									<select required="" id="ruolo_a1_b1" name="ruolo" onclick="popolaElencoPlus(this.id,'ruoli')" onchange="initSoggetto(this.id)"  style="width:500px">
+										<option value="" selected="" disabled="">selezionare un ruolo</option>
+									</select>
+									<button id="remove_a1_b1" class="btn btn-danger remove-me" onclick="removeDiv(this.parentNode.id);initSoggetto('ruolo_a1_b1')">-</button>
+								</div>
+								<button id="addR_a1_b1" onClick="addField(this.parentNode,['ruolo'],[''],'unbounded','elenco');" class="btn add-more" type="button">Aggiungi ruolo</button>
+								<!-- <button onClick="initElement(this.parentNode.id);" class="btn add-more" type="button">init</button>  -->
+							</div>
+							<!-- fine elenco ruoli -->
+						</div>
+						<div>
+							<h2>Dati Anagrafici</h2>
+							<div class="bordato">
+								<div>
+									<label>Tipologia soggetto:</label>            
+								  <label for = "TipoSoggettoPF" class="inradio">Persona fisica</label><input type = "radio" name = "TipoSoggetto_a1" id = "TipoSoggettoPF_a1" value = "PF" checked = "" onClick="showDiv('TipoSoggettoPF_a1','datiPG_a1','datiPF_a1')" />
+								  <label for = "TipoSoggettoPG" class="inradio">Persona giuridica</label><input type = "radio" name = "TipoSoggetto_a1" id = "TipoSoggettoPG_a1" value = "RS" onClick="showDiv('TipoSoggettoPG_a1','datiPF_a1','datiPG_a1')" />
+								</div>		
+								<div id="datiPF_a1">
+									<div>
+										<label>Cognome</label><input type="text" required="" id="Cognome_a1" />
+										<label>Nome</label><input type="text" placeholder="" required="" id="Nome_a1" />
+										<label>Codice fiscale</label><input type="text" value="" placeholder="" required="" id="CodiceFiscale_a1" size="16" maxlength="16" style="width:160px"/>
+										<label>Sesso</label><select required="" id="Sesso_a1" style="width:100px">
+											<option value=""></option>
+											<option value="M">M</option>
+											<option value="F">F</option>
+										</select>
+									</div>
+									<div>
+										<label>Data di nascita</label><input type="text" placeholder="" required="" id="DataNascita_a1" style="width:120px" class="datepicker"/>
+										<label>Stato di nascita</label><select required="" id="NazioneNascita_a1" onclick="popolaNazioni(this.id)">
+											<option value=""></option>
+										</select>
+										<label>Provincia</label><select required="" id="SiglaProvinciaNascita_a1" style="width:140px" onclick="popolaProvincia(this.id)" onchange="popolaComuni(this.id,'ComuneNascita_a1')">
+											<option value=""></option>
+										</select>
+										<label>Comune di nascita</label><select required="" id="ComuneNascita_a1" >
+											<option value=""></option>
+										</select>	
+										
+									</div>
+								</div>
+								<div id="datiPG_a1" style="display:none">
+									<div>
+										<label>Ragione sociale</label><input type="text" placeholder="" required="" id="RagioneSociale_a1" style="width:300px" />
+									</div>
+									<div>
+										<label>Codice fiscale persone giuridiche o Partita IVA</label><input type="text" required="" id="PartitaIva_a1" />
+									</div>
+								</div>							
+							</div>		
+						<!-- fine datiAnagrafici -->							
+						</div>
+						<div>
+							<h2>Indirizzi</h2>
+							<div class="commento">Inserire un indirizzo per ciascuna tipologia</div>
+							<div id="elencoIndirizzi_a1" class="bordato">
+								<div id="divIndirizzo_a1_b1" class="elenco">
+									<div>
+										<label>Tipo di indirizzo:</label> <select required="" id="tipoIndirizzo_a1_b1" style="width:auto">
+											<option value="">selezionare un tipo di indirizzo</option>
+											<option value="1">Comunicazioni ufficiali</option>
+											<option value="2">Residenza</option>
+											<option value="3">Sede legale / studio</option>									
+										</select>
+									</div>
+									<div>
+										<label>Presso C/O</label><input type="text" placeholder="Es: C/O Studio Alfa" required="" id="Presso_a1_b1" style="width:400px" />
+
+										<label>Sedime</label><input type="text" required="" id="Sedime_a1_b1" style="width:100px" maxlength="150"/>
+										<label>Indirizzo</label><input type="text" required="" id="Via_a1_b1" style="width:350px" maxlength="150"/>
+										<label>Numero</label><input type="text" required="" id="Civico_a1_b1" style="width:180px" maxlength="50"/>
+									</div>
+									<div>
+										<label>Stato</label><select required="" id="Nazione_a1_b1" onclick="popolaNazioni(this.id)" style="width:300px">
+											<option value=""></option>
+										</select>
+										<label>Provincia</label><select required="" id="SiglaProvincia_a1_b1" style="width:180px" onclick="popolaProvincia(this.id)" onchange="popolaComuni(this.id,'DescrizioneComune_a1_b1')">
+											<option value=""></option>
+										</select>
+										<label>Comune</label><select required="" id="DescrizioneComune_a1_b1" style="width:300px">
+											<option value=""></option>
+										</select>
+										<label>CAP</label><input type="text" placeholder="" required="" id="Cap_a1_b1" style="width:100px" maxlength="12"/>
+									</div>
+									<div>
+										<label>Telefono</label><input type="text" required="" id="Telefono_a1_b1" style="width:120px" maxlength="12"/>
+										<label>Cellulare</label><input type="text" required="" id="Cellulare_a1_b1" style="width:120px" maxlength="12"/>
+										<label>Fax</label><input type="text" required="" id="Fax_a1_b1" style="width:120px" maxlength="12"/>
+
+										<label>Email</label><input type="text" required="" id="Email_a1_b1" maxlength="100"/>
+										<label>PEC</label><input type="text" placeholder="Posta Elettronica Certificata" required="" id="EmailCertificata_a1_b1" maxlength="100"/>
+									</div>								
+									<button id="remove_a1_b1" class="btn btn-danger remove-me" onclick="removeDiv(this.parentNode.id)">-</button>
+								</div>
+								<button id="addInd_a1_b1" onClick="addField(this.parentNode,['indirizzo'],[''],'unbounded','elenco');" class="btn add-more" type="button" style="width:180px">Aggiungi indirizzo</button>
+								<!-- <button onClick="initElement(this.parentNode.id);" class="btn add-more" type="button">init</button>  -->
+							</div>						
+						</div>
+						<div id="qualificazioneProf_a1" style="display:none">
+							<h2>Qualificazione professionale</h2>
+							<div class="bordato">
+								<div>
+									<label>Qualifica</label><select required="" id="IdQualifica_a1" style="width:300px" onclick="popolaElenco(this.id,'elencoQualificheProfessionali')">
+										<option value=""></option>			
+									</select>
+									<input type="checkbox" id="DipendenteIntestatario_a1" />dipendente del soggetto intestatario dell'istanza
+								</div>
+								<div>
+									<label>N° iscrizione Albo Professionale *</label><input type="text" required="" id="NumeroIscrizione_a1" style="width:400px" maxlength="20"/>
+
+									<label>Provincia</label><select required="" id="SiglaProvincia_a1" style="width:180px" onclick="popolaProvincia(this.id)">
+										<option value=""></option>
+									</select>
+									<label>Ordine di appartenenza</label><select required="" id="IdOrdine_a1" style="width:300px" onclick="popolaElenco(this.id,'elencoOrdiniProfessionali')">
+										<option value=""></option>
+									</select>									
+								</div>
+							</div>
+						</div>
+						<div id="qualificazioneProfImp_a1" style="display:none">
+							<h2>Qualificazione professionale</h2>
+							<div class="bordato">
+								<div>
+									<label>N° iscrizione Cassa Edile</label><input type="text" required="" id="NumeroIscrizioneCE_a1" style="width:400px" maxlength="20"/>
+
+									<label>Provincia</label><select required="" id="SiglaProvinciaCE_a1" style="width:180px" onclick="popolaProvincia(this.id)">
+										<option value=""></option>
+									</select>
+									<label>Cassa edile</label><select required="" id="IdOrdineCE_a1" style="width:300px" onclick="popolaElenco(this.id,'elencoCassaEdile')">
+										<option value=""></option>
+									</select>									
+								</div>
+							</div>
+						</div>						
+						<div id="qualificazioneSogg_a1" style="display:none">						
+							<h2>Qualificazione del soggetto</h2>
+							<div class="bordato">						
+								<div id="primoIntestatario_a1" style="display:none">
+									<div>L'intestatario, in applicazione degli art. 46 e 47 del D.P.R. 28/12/2000 n° 445; consapevole della responsabilità penale, in caso di falsità in atti
+										e di dichiarazione mendace, ai sensi dell'art. 76 del D.P.R. 28/12/2000 n° 445,
+									<p style="text-align:center">DICHIARA</p>
+									</div>
+									in qualità di Primo Intestato, unitamente a num. 
+									<input type="text" required="" id="NumeroRichiedenti_a1" style="width:40px" maxlength="2"/>
+									soggetti in qualità di richiedenti come da autocertificazioni allegate, che la pratica è presentata								
+								</div>
+								<div id="cointestatario_a1" style="display:none">
+									<div>Il cointestatario, in applicazione degli art. 46 e 47 del D.P.R. 28/12/2000 n° 445; consapevole della responsabilità penale, in caso di falsità in
+										atti e di dichiarazione mendace, ai sensi dell'art. 76 del D.P.R. 28/12/2000 n° 445,
+									<p style="text-align:center">DICHIARA</p>
+									</div>
+									in qualità di Cointestato, che la pratica in oggetto è presentata								
+								</div>							
+								<div>
+								  <label for = "tipoQualificazioneP_a1" class="inradio">in proprio</label><input type = "radio" name = "tipoQualificazione_a1" id = "tipoQualificazioneP_a1" value = "P" checked = "" onClick="initRappresentanza(this.id)" />
+								  <label for = "tipoQualificazioneA_a1" class="inradio">in qualità di rappresentante di:</label>
+								   <input type = "radio" name = "tipoQualificazione_a1" id = "tipoQualificazioneA_a1" value = "A" onClick="initRappresentanza(this.id)" />
+								</div>		
+								<div id="datiRappresentanza_a1" style="display:none">
+									<label>Avente Titolo Rappresentato</label><select required="" id="AventeTitoloRappresentato_a1" style="width:300px" onclick="popolaAventiTitolo(this.id)">
+										<option value=""></option>
+									</select>									
+									<label>Titolo di rappresentanza</label><select required="" id="IdTitoloRappresentanza_a1" style="width:300px" onclick="popolaElencoPlus(this.id,'titoliRappresentanza')">
+										<option value=""></option>
+									</select>								
+									
+								</div>
+							</div>						
+						</div>
+						<div id="titoloLegittimazione_a1" style="display:none">
+							<h2>Titolo di legittimazione</h2>
+							<input type="hidden" id="tipoLegittimazione_a1" value="" />
+							<div class="bordato">
+								di essere legittimato in quanto:
+								<select required="" id="IdLegittimazione_a1" style="width:400px" onclick="popolaElencoPlus(this.id,'titoliLegittimazione')">
+									<option value="">Titolo di legittimazione</option>
+								</select>									
+							</div>								
+						</div>
+		
+						<!-- bottone per rimuovere il soggetto -->
+						<button id="removeS_a1" class="btn btn-danger remove-me" onclick="removeDiv(this.parentNode.id)" title="Elimina soggetto">-</button><span id="labelSoggetto_a1" class="labelSoggetto"></span>
+					</div>
+					<button id="addS_a1" onClick="addField(this.parentNode,[''],[''],'unbounded','soggetto elenco')" class="btn add-more btns1" type="button">Aggiungi soggetto</button>
+				</div>
+				<input type="hidden" value="" />
+			</form><!-- form -->
+			<!-- <div class="button">
+				<a href="#" onclick="saveJSON()">Salva</a>
+			</div>
+			-->
+			<div class="button2">
+				<a href="#" onclick="createElementsFromJSON();">Inizializza</a>
+				<a href="#" onclick="validaSoggettiCoinvolti('elencoSoggetti')">Valida</a>
+				<a href="#" onclick="saveJSON()">Salva</a>
+			</div>
+			<!-- <div><input type="submit" value="Log in" /></div>  -->
+		</section><!-- content -->
+	</div><!-- container -->
+
+<script language="Javascript" type="text/javascript">
+
+	var colorText = '#000';
+	//var colorPlaceHolder = '#989898';
+	var colorPlaceHolder = '#000';
+	$("select").on( "focusout", function () {
+	  if($(this).val() != "") {
+		$(this).css('color', colorText);
+		$(this).removeClass( "error" );
+	  }
+	  else{
+		$(this).css('color', colorPlaceHolder);
+	  }
+	});
+
+	$("input").on( "focusout", function () {
+	  if($(this).val() != "") {
+		$(this).removeClass( "error" );
+	  }
+	});
+    $(".datepicker").datepicker({
+        format: "dd/mm/yyyy",
+        language: "it"
+    });	
+/*	
+	if ($('html').is('.lt-ie9'))	
+	{
+		$('[placeholder]').focus(function() {
+		  var input = $(this);
+		  if (input.val() == input.attr('placeholder')) {
+			input.val('');
+			input.removeClass('placeholder');
+		  }
+		}).blur(function() {
+		  var input = $(this);
+		  if (input.val() == '' || input.val() == input.attr('placeholder')) {
+			input.addClass('placeholder');
+			input.val(input.attr('placeholder'));
+		  }
+		}).blur();	
+	}
+*/	
+</script>	
+</body> 
+</html> 
+
